@@ -5,11 +5,15 @@ include OpenEHR::AssumedLibraryTypes
 describe CAttribute do
   before(:each) do
     existence = Interval.new(:lower => 0, :upper => 1)
-    children = stub(CObject, :rm_type_name => 'DV_AMOUNT')
-    @c_attribute = CAttribute.new(:path => '/event/[at0001]/',
-                                  :rm_attribute_name => 'DV_TEXT',
+    parent = stub(CObject, :path => '/event[at0001]')
+    occurrences = existence
+    children = [CObject.new(:rm_type_name => 'DV_AMOUNT', 
+                           :occurrences => occurrences)]
+    @c_attribute = CAttribute.new(:parent => parent,
+                                  :rm_attribute_name => 'data',
                                   :existence => existence,
                                   :children => children)
+
   end
 
   it 'should be an instance of CAttribute' do
@@ -17,9 +21,23 @@ describe CAttribute do
   end
 
   it 'rm_attribute_name should be assigned properly' do
-    @c_attribute.rm_attribute_name.should == 'DV_TEXT'
+    @c_attribute.rm_attribute_name.should == 'data'
   end
-
+  
+  it 'path should be calculated properly' do
+    @c_attribute.path.should == '/event[at0001]/data'
+  end
+  
+  context 'path' do
+    before(:each) do
+      @c_attribute.path = '/event[at0001]/new'
+    end
+  
+    it 'should be assigned properly' do
+      @c_attribute.path.should == '/event[at0001]/new'
+    end
+  end
+  
   it 'should raise ArguemntError rm_attribute_name is empty' do
     lambda {
       @c_attribute.rm_attribute_name = ''
@@ -51,8 +69,13 @@ describe CAttribute do
   end
 
   it 'children should be assigned properly' do
-    @c_attribute.children.rm_type_name.should == 'DV_AMOUNT'
+    @c_attribute.children[0].rm_type_name.should == 'DV_AMOUNT'
   end
+  
+  it 'children parent should be set properly' do
+    @c_attribute.children[0].parent.should == @c_attribute
+  end
+ 
 end
 
 
