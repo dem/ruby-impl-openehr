@@ -125,11 +125,10 @@ module OpenEHR
             @occurrences = occurrences
           end
 
-          def path
-            super || 
-            (p = parent_path;
-             predicate = node_id && !(p == '')? '[' + node_id + ']' : '' ;
-             p + predicate)
+          def path                    
+            super || (left = (parent_path == '' ? '/' : parent_path);
+                       right = (node_id && left != '/' ? '[' + node_id + ']' : '');
+                       left + right)
           end
 
           def self.create(args = { }, &block)
@@ -153,7 +152,8 @@ module OpenEHR
           end
 
           def path
-            super || (parent_path +  '/' + rm_attribute_name)
+            super || (left = parent_path == '/' ? '/' : parent_path + '/'
+                       left + rm_attribute_name)
           end
           
           def children=(children)
