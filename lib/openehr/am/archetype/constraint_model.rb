@@ -11,8 +11,12 @@ module OpenEHR
           attr_accessor :parent
 
           def initialize(args = { })
-            self.path = args[:path]
+            self.path = args[:path] if args[:path]
             self.parent = args[:parent]
+          end
+        
+          def has_path?(search_path)
+            return path.include?(search_path)
           end
 
           def path=(path)
@@ -22,12 +26,12 @@ module OpenEHR
             @path = path
           end
 
-          def has_path?(path)
-            return @path.include?(path)
+          def has_path?(search_path)
+            return path.include?(search_path)
           end
 
           def congruent?
-            if @path.index(@parent.path) == 0
+            if path.index(@parent.path) == 0
               return true
             else
               return false
@@ -37,11 +41,16 @@ module OpenEHR
           alias is_congruent? congruent?
 
           def node_conforms_to?(other)
-            if @path.index(other.path) == 0
+            if path.index(other.path) == 0
               return true
             else
               return false
             end
+          end
+          
+          protected
+          def parent_path
+            parent ? parent.path : ''
           end
         end
 
@@ -116,6 +125,12 @@ module OpenEHR
             @occurrences = occurrences
           end
 
+          def path                    
+            super || (left = (parent_path == '' ? '/' : parent_path);
+                       right = (node_id && left != '/' ? '[' + node_id + ']' : '');
+                       left + right)
+          end
+
           def self.create(args = { }, &block)
             c_object = new(args)
             if block_given?
@@ -136,6 +151,16 @@ module OpenEHR
             self.children = args[:children]
           end
 
+          def path
+            super || (left = parent_path == '/' ? '/' : parent_path + '/'
+                       left + rm_attribute_name)
+          end
+          
+          def children=(children)
+            @children = children
+            children.each{|child| child.parent = self } if children
+          end
+          
           def rm_attribute_name=(rm_attribute_name)
             if rm_attribute_name.nil? or rm_attribute_name.empty?
               raise ArgumentError, 'invalid rm_attribute_name'
@@ -210,6 +235,11 @@ module OpenEHR
           def initialize(args = { })
             super
             self.attributes = args[:attributes]
+          end
+          
+          def attributes=(attributes)
+            @attributes = attributes
+            @attributes.each{|child| child.parent = self } if attributes
           end
 
           def any_allowed?
