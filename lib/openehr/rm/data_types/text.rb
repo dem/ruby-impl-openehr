@@ -12,7 +12,7 @@ module OpenEHR
 
           def initialize(args ={})
             self.match = args[:match]
-            self.purpose = args[:purpose]
+            self.purpose = args[:purpose] if args.key?(:purpose)
             self.target = args[:target]
           end
 
@@ -87,11 +87,11 @@ module OpenEHR
 
           def initialize(args = {})
             super(args)
-            self.formatting = args[:formatting]
-            self.encoding = args[:encoding]
-            self.mappings = args[:mappings]
-            self.language = args[:language]
-            self.hyperlink = args[:hyperlink]
+            self.formatting = args[:formatting] if args.key?(:formatting)
+            self.encoding = args[:encoding] if args.key?(:encoding)
+            self.mappings = args[:mappings] if args.key?(:mappings)
+            self.language = args[:language] if args.key?(:language)
+            self.hyperlink = args[:hyperlink] if args.key?(:hyperlink)
           end
 
           def value=(value)

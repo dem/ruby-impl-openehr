@@ -16,9 +16,9 @@ module OpenEHR
 
           def initialize(args = {})
             super(args)
-            self.normal_range = args[:normal_range]
-            self.normal_status = args[:normal_status]
-            self.other_reference_ranges = args[:other_reference_ranges]
+            self.normal_range = args[:normal_range] if args.key?(:normal_range)
+            self.normal_status = args[:normal_status] if args.key?(:normal_status)
+            self.other_reference_ranges = args[:other_reference_ranges] if args.key?(:other_reference_ranges)
           end          
 
           def is_normal?
@@ -65,7 +65,7 @@ module OpenEHR
           def initialize(args = {})
             super(args)
             self.magnitude = args[:magnitude]
-            self.magnitude_status = args[:magnitude_status]
+            self.magnitude_status = args[:magnitude_status] if args.key?(:magnitude_status)
           end
 
           def <=>(others)
@@ -107,7 +107,7 @@ module OpenEHR
           def initialize(args = {})
             super(args)
             self.symbol = args[:symbol]
-            self.limits = args[:limits]
+            self.limits = args[:limits] if args.key?(:limits)
           end
 
           def value=(value)
@@ -149,7 +149,7 @@ module OpenEHR
 
           def initialize(args = {})
             super(args)
-            self.accuracy = args[:accuracy]
+            self.accuracy = args[:accuracy] if args.key?(:accuracy)
           end
 
           def add(a_diff)
@@ -195,7 +195,8 @@ module OpenEHR
             unless args[:accuracy].nil?
               set_accuracy(args[:accuracy], args[:accuracy_percent])
             else
-              @accuracy, @accuracy_percent = nil, nil
+              @accuracy = args[:accuracy] if args.key?(:accuracy)
+              @accuracy_percent = args[:accuracy_percent] if args.key?(:accuracy_percent)
             end
           end
 
@@ -233,7 +234,7 @@ module OpenEHR
           def initialize(args = {})
             super(args)
             self.units = args[:units]
-            self.precision = args[:precision]
+            self.precision = args[:precision] if args.key?(:precision)
           end
 
           def units=(units)
@@ -320,16 +321,17 @@ module OpenEHR
             self.type = args[:type]
             self.numerator = args[:numerator]
             self.denominator = args[:denominator]
-            self.precision = args[:precision]
-            self.magnitude_status =args[:magnitude_status]
+            self.precision = args[:precision] if args.key?(:precision)
+            self.magnitude_status = args[:magnitude_status]
             unless args[:accuracy].nil?
               set_accuracy(args[:accuracy], args[:accuracy_percent])
             else
-              @accuracy, @accuracy_percent = nil, nil
+              @accuracy = args[:accuracy] if args.key?(:accuracy)
+              @accuracy_percent = args[:accuracy_percent] if args.key?(:accuracy_percent)
             end
-            self.normal_range = args[:normal_range]
-            self.normal_status = args[:normal_status]
-            self.other_reference_ranges = args[:other_reference_ranges]
+            self.normal_range = args[:normal_range] if args.key?(:normal_range)
+            self.normal_status = args[:normal_status] if args.key?(:normal_status)
+            self.other_reference_ranges = args[:other_reference_ranges] if args.key?(:other_reference_ranges)
           end
 
           def numerator=(numerator)
