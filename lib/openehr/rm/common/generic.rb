@@ -99,38 +99,38 @@ module OpenEHR
         end
 
         class PartyIdentified < PartyProxy
-          attr_reader :name, :identifier
+          attr_reader :name, :identifiers
 
           def initialize(args = { })
             if args[:external_ref].nil? && args[:name].nil? &&
-                args[:identifier].nil?
+                args[:identifiers].nil?
               raise ArgumentError, 'cannot identified'
             end
             self.name = args[:name]
-            self.identifier = args[:identifier]
+            self.identifiers = args[:identifiers]
             super(args)
           end
 
           def name=(name)
-            if name.nil? && @external_ref.nil? && @identifier.nil?
+            if name.nil? && @external_ref.nil? && @identifiers.nil?
               raise ArgumentError, 'cannot identified'
             end
             raise ArgumentError, 'invaild name' unless name.nil? || !name.empty?
             @name = name
           end
 
-          def identifier=(identifier)
-            if @name.nil? && @external_ref.nil? && identifier.nil?
+          def identifiers=(identifiers)
+            if @name.nil? && @external_ref.nil? && identifiers.nil?
               raise ArgumentError, 'cannot identified'
             end
-            if !identifier.nil? && identifier.empty?
-              raise ArgumentError, 'invaild identifier'
+            if !identifiers.nil? && identifiers.empty?
+              raise ArgumentError, 'invalid identifiers'
             end
-            @identifier = identifier
+            @identifiers = identifiers
           end
 
           def external_ref=(external_ref)
-            if @name.nil? && @identifier.nil? && external_ref.nil?
+            if @name.nil? && @identifiers.nil? && external_ref.nil?
               raise ArgumentError, 'invalid external_ref'
             end
             @external_ref = external_ref

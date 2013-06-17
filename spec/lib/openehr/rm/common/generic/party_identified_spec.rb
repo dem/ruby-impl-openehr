@@ -7,7 +7,7 @@ describe PartyIdentified do
     identifiers = stub(Array, :size => 5, :empty? => false)
     @party_identified = PartyIdentified.new(:name => 'NERV',
                                             :external_ref => external_ref,
-                                            :identifier => identifiers)
+                                            :identifiers => identifiers)
   end
 
   it 'should be an instance of PartyIdentified' do
@@ -23,7 +23,7 @@ describe PartyIdentified do
   end
 
   it 'should assign identifier properly' do
-    @party_identified.identifier.size.should be_equal 5
+    @party_identified.identifiers.size.should be_equal 5
   end
 
   it 'should raise ArgumentError with all nil' do
@@ -33,7 +33,7 @@ describe PartyIdentified do
   end
 
   it 'should raise ArgumentError with nil name when ex_r and id nil' do
-    @party_identified.identifier = nil
+    @party_identified.identifiers = nil
     @party_identified.external_ref = nil
     lambda {
       @party_identified.name = nil
@@ -42,7 +42,7 @@ describe PartyIdentified do
 
   it 'should raise ArgumentError with nil external_ref when name and id nil' do
     @party_identified.name = nil
-    @party_identified.identifier = nil
+    @party_identified.identifiers = nil
     lambda {
       @party_identified.external_ref = nil
     }.should raise_error ArgumentError
@@ -52,13 +52,13 @@ describe PartyIdentified do
     @party_identified.name = nil
     @party_identified.external_ref = nil
     lambda {
-      @party_identified.identifier = nil
+      @party_identified.identifiers = nil
     }.should raise_error ArgumentError
   end
 
   it 'should raise ArgumentError with empty identifier' do
     lambda {
-      @party_identified.identifier = Array.new
+      @party_identified.identifiers = Array.new
     }.should raise_error ArgumentError
   end
 end
